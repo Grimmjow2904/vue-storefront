@@ -48,11 +48,12 @@
           </div>
         </div>
       </div>
-      <div class="my-10 grid grid-cols-4 gap-5 p-4">
-        <div
+      <ul class="my-10 grid grid-cols-4 gap-5 p-4">
+        <li
+          @click="similarClick(item.id)"
           v-for="item in similar"
           :key="item.id"
-          class="flex flex-col items-center justify-center rounded-md border-2 p-4 shadow-lg transition-all duration-300 hover:-translate-y-4"
+          class="flex cursor-pointer flex-col items-center justify-center rounded-md border-2 p-4 shadow-lg transition-all duration-300 hover:-translate-y-4"
         >
           <div class="w-1/2">
             <img
@@ -62,8 +63,8 @@
             />
           </div>
           <h1>{{ item.title }}</h1>
-        </div>
-      </div>
+        </li>
+      </ul>
     </div>
 
     <div v-else="">
@@ -76,7 +77,7 @@
 import { ref, onMounted, watch } from "vue";
 import DetailLabel from "@/components/DetailLabel.vue";
 import type IProducts from "@/types/IProducts";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useCartStore } from "@/stores/cart";
 
 const product = ref<IProducts>();
@@ -84,6 +85,7 @@ const product = ref<IProducts>();
 const similar = ref<IProducts[]>();
 
 const route = useRoute();
+const router = useRouter();
 
 const cart = useCartStore();
 
@@ -98,6 +100,24 @@ const buyClick = () => {
   }
 };
 
+const similarClick = (id: number) => {
+  router.push({
+    name: "product",
+    params: { id: id },
+  });
+  fetch("https://fakestoreapi.com/products/" + id)
+    .then((res) => {
+      return res.json();
+    })
+    .then((json) => {
+      product.value = json;
+    })
+    .catch((error) => {
+      err.value = true;
+      console.log("El producto no existe", error);
+    });
+};
+
 watch(product, async (newProduct) => {
   if (newProduct) {
     fetch(
@@ -106,8 +126,6 @@ watch(product, async (newProduct) => {
         "/?limit=4"
     )
       .then((res) => {
-        console.log(res);
-
         return res.json();
       })
       .then((json) => {

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex h-[40vh] flex-col rounded-md p-3 border-2 shadow-md transition-all duration-300 hover:-translate-y-2"
+    class="flex h-[40vh] flex-col rounded-md border-2 p-3 shadow-md transition-all duration-300 hover:-translate-y-2"
   >
     <div class="h-2/5">
       <img
@@ -50,7 +50,6 @@ const router = useRouter();
 const detailClick = (id: number) => {
   router.push({
     name: "product",
-    // preserve current path and remove the first char to avoid the target URL starting with `//`
     params: { id: id },
   });
 };
