@@ -33,14 +33,22 @@ export const useCartStore = defineStore("cart", () => {
 
   function removeCart(product: IProducts, amoung: number) {
     const item = cart.value.filter((x) => x.product.id == product.id);
-    if (item.length == 1) {
+    if (item.length > 0) {
       item[0].cuantity -= amoung;
-    } else {
-      cart.value.push({ product: product, cuantity: amoung });
+      if (item[0].cuantity <= 0) {
+        cart.value = cart.value.filter(
+          (x) => x.product.id != item[0].product.id
+        );
+      }
     }
   }
 
-  return { cart, addCart, totalPrice, totalItems };
+  async function makeOrder() {
+    /* llamada api de crear orden */
+    cart.value = [];
+  }
+
+  return { cart, addCart, removeCart, makeOrder, totalPrice, totalItems };
 });
 
 if (import.meta.hot) {

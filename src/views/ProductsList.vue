@@ -2,15 +2,17 @@
   <div class="flex flex-col">
     <h1 class="mx-2 w-1/2 border-b-2">Productos</h1>
 
-    <div class="flex">
+    <div class="relative grid grid-cols-6">
       <TheFilter @category="byCat" />
-      <div class="w-5/6">
+      <div class="col-span-5">
         <ul v-if="products.length > 0" class="grid grid-cols-3 gap-4 p-4">
           <li v-for="product in products" :key="product.id">
             <ProductCard :product="product" />
           </li>
         </ul>
-        <div class="w-5/6" v-else>Cargando</div>
+        <div class="flex h-96 w-5/6 items-center justify-center" v-else>
+          <h1 class="">Cargando..</h1>
+        </div>
       </div>
     </div>
   </div>
