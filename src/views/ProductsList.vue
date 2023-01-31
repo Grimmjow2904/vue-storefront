@@ -1,13 +1,18 @@
 <template>
-  <div class=" ">
-    Listado de elementos
+  <div class="flex flex-col">
+    <h1 class="mx-2 w-1/2 border-b-2">Productos</h1>
 
-    <ul v-if="products.length > 0">
-      <li v-for="product in products" :key="product.id">
-        <ProductCard :product="product" />
-      </li>
-    </ul>
-    <div v-else>Cargando</div>
+    <div class="flex">
+      <TheFilter @category="byCat" />
+      <div class="w-5/6">
+        <ul v-if="products.length > 0" class="grid grid-cols-3 gap-4 p-4">
+          <li v-for="product in products" :key="product.id">
+            <ProductCard :product="product" />
+          </li>
+        </ul>
+        <div class="w-5/6" v-else>Cargando</div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -16,8 +21,25 @@ import { ref, onMounted } from "vue";
 
 import type IProducs from "@/types/IProducts";
 import ProductCard from "@/components/ProductCard.vue";
+import TheFilter from "@/components/TheFilter.vue";
 
 const products = ref<IProducs[]>([]);
+
+const byCat = (name: string) => {
+  const temp = products.value;
+  try {
+    products.value = [];
+
+    fetch("https://fakestoreapi.com/products/category/" + name)
+      .then((res) => res.json())
+      .then((json) => {
+        products.value = json;
+      });
+  } catch (error) {
+    products.value = temp;
+    alert("Error de busqueda");
+  }
+};
 
 onMounted(async () => {
   try {
