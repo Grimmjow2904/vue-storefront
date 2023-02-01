@@ -50,6 +50,9 @@
                   +
                 </button>
               </div>
+              <label class="text-center" for="tota">
+                $ {{ item.cuantity * item.product.price }}</label
+              >
               <button
                 @click="remove(item.product, item.cuantity)"
                 class="button bg-red-700 text-white"
