@@ -1,5 +1,5 @@
 <template>
-  <div class="relative">
+  <div>
     <label class="font-bold uppercase" :for="name">{{ name }}</label>
     <p>
       {{ value }}

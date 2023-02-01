@@ -9,7 +9,7 @@
       <div>
         <div class="grid grid-cols-2 gap-4 p-4">
           <div class="flex items-center justify-center">
-            <div class="w-1/2">
+            <div class="w-1/3">
               <img
                 :src="product.image"
                 :alt="product.description"
@@ -18,34 +18,7 @@
             </div>
           </div>
 
-          <div class="flex flex-col items-center justify-center">
-            <h2 class="text-center font-bold">Caracteristicas</h2>
-            <p class="my-4">
-              {{ product.description }}
-            </p>
-
-            <div class="my-5 grid w-full grid-cols-2 gap-4">
-              <DetailLabel :value="product.category" :name="'category'" />
-              <DetailLabel :value="product.rating.rate" :name="'rating'" />
-            </div>
-
-            <div class="grid w-full grid-cols-4 gap-4">
-              <DetailLabel :value="product.price" :name="'price'" />
-
-              <input
-                v-model="cantidad"
-                type="number"
-                name="cantidad"
-                min="1"
-                class="w-1/2 justify-self-end border-2 text-end"
-              />
-              <DetailLabel :value="product.price * cantidad" :name="'total'" />
-
-              <button @click="buyClick" class="button bg-orange-500">
-                Comprar
-              </button>
-            </div>
-          </div>
+          <ToBuy :product="product" />
         </div>
       </div>
 
@@ -76,30 +49,17 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
-import DetailLabel from "@/components/DetailLabel.vue";
 import type IProducts from "@/types/IProducts";
-import { useRoute, useRouter } from "vue-router";
-import { useCartStore } from "@/stores/cart";
+import { useRoute } from "vue-router";
+import ToBuy from "@/components/ToBuy.vue";
 
 const product = ref<IProducts>();
 
 const similar = ref<IProducts[]>();
 
 const route = useRoute();
-const router = useRouter();
-
-const cart = useCartStore();
-
-const cantidad = ref(1);
 
 const err = ref(false);
-
-const buyClick = () => {
-  if (product.value) {
-    cart.addCart(product.value, cantidad.value);
-    cantidad.value = 1;
-  }
-};
 
 watch(product, async (newProduct) => {
   if (newProduct) {
