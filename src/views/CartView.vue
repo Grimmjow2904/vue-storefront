@@ -38,7 +38,10 @@
 
             <div class="col-span-1 flex flex-col font-bold">
               <div class="flex items-center justify-between">
-                <button @click="remove(item.product)" class="button border-2">
+                <button
+                  @click="remove(item.product, 1)"
+                  class="button border-2"
+                >
                   -
                 </button>
 
@@ -47,7 +50,12 @@
                   +
                 </button>
               </div>
-              <button class="button bg-red-700 text-white">Eliminar</button>
+              <button
+                @click="remove(item.product, item.cuantity)"
+                class="button bg-red-700 text-white"
+              >
+                Eliminar
+              </button>
             </div>
           </div>
         </div>
@@ -72,8 +80,8 @@ const add = (product: IProducts) => {
   store.addCart(product, 1);
 };
 
-const remove = (product: IProducts) => {
-  store.removeCart(product, 1);
+const remove = (product: IProducts, cant: number) => {
+  store.removeCart(product, cant);
 };
 </script>
 
